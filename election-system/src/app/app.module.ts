@@ -10,7 +10,7 @@ import { LoginPageComponent } from './login-page/login-page.component';
 // import { VoterDashboardComponent } from './voter-dashboard/voter-dashboard.component';
 // import { CandidateDashboardComponent } from './candidate-dashboard/candidate-dashboard.component';
 // import { CandidateRegistrationComponent } from './candidate-registration/candidate-registration.component';
-// import { VoterRegistrationComponent } from './voter-registration/voter-registration.component';
+import { VoterRegistrationComponent } from './voter-registration/voter-registration.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +20,7 @@ import { LoginPageComponent } from './login-page/login-page.component';
     // AdminDashboardComponent,
     // CandidateDashboardComponent,
     // CandidateRegistrationComponent,
-    // VoterRegistrationComponent
+    VoterRegistrationComponent
   ],
   imports: [
     FormsModule,
@@ -33,7 +33,7 @@ import { LoginPageComponent } from './login-page/login-page.component';
       // {path: 'voter-dashboard', component: VoterDashboardComponent},
       // {path: 'candidate-dashboard', component: CandidateDashboardComponent},
       // {path: 'candidate-registration', component: CandidateRegistrationComponent},
-      // {path: 'voter-registration', component: VoterRegistrationComponent},
+      {path: 'voter-registration', component: VoterRegistrationComponent},
     ]),
   ],
   providers: [],
