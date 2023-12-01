@@ -26,6 +26,128 @@ app.use(cors());
 
 app.use(bodyParser.json());
 
+app.post('/login', (req, res) => {
+    const { userID, password, userType } = req.body;
+
+    const query = 'SELECT * FROM users WHERE userID = ? AND password = ? AND user_type = ?';
+
+    db.query(query, [userID, password, userType], (err, results) => {
+        if (err) {
+            console.error('Database error: ' + err.message);
+            res.status(500).json({ error: 'Internal server error' });
+            return;
+        }
+
+        if (results && results.length === 1) {
+            if (userType === 'Candidate') {
+                const canFetchQuery = 'SELECT passport_id, verified FROM candidate WHERE passport_id = ?';
+                db.query(canFetchQuery, [userID], (err, results1) => {
+                    if (err) {
+                        console.error('Database error: ' + err.message);
+                        res.status(500).json({ error: 'Internal server error' });
+                        return;
+                    }
+                    results1 = JSON.parse(JSON.stringify(results1));
+                    if (results1 && results1.length == 1) {
+                        if (results1[0].verified) {
+                            res.json({
+                                data: results,
+                                accountVerified: 1,
+                                message: 'Login successful'
+                            });
+                        } else {
+                            res.json({
+                                data: results,
+                                accountVerified: 0,
+                                message: "Login successful"
+                            });
+                        }
+                    } else {
+                        res.json({
+                            error: 'Invalid credentials'
+                        });
+                    }
+                });
+            } else {
+                res.json({ data: results, message: 'Login successful' });
+            }
+        } else {
+            res.json({ error: 'Invalid credentials' });
+        }
+    });
+});
+
+app.post('/addNewElection', (req, res) => {
+    const { electionID, electionName, electionDate } = req.body;
+
+    const query = 'SELECT * FROM Elections WHERE electionID = ?';
+
+    db.query(query, [electionID], (err, results) => {
+        if (err) {
+            console.error('Database error: ' + err.message);
+            res.status(500).json({ error: 'Internal server error' });
+            return;
+        }
+
+        if (results && results.length && results.length == 1) {
+            res.json({
+                res: false,
+                message: "Election with this election id already exists!"
+            });
+        } else {
+            const insertElection = 'INSERT INTO Elections VALUES (?, ?, ?)';
+
+            db.query(insertElection, [electionID, electionName, electionDate], (err, results) => {
+                if (err) {
+                    console.error('Database error: ' + err.message);
+                    res.status(500).json({ error: 'Internal server error' });
+                    return;
+                }
+
+                res.json({
+                    res: true,
+                    message: "Election created successfully!"
+                });
+                
+            });
+
+        }
+    });
+});
+
+app.get('/fetchAllElections', (req, res) => {
+
+    const query = 'SELECT * FROM elections';
+
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Database error: ' + err.message);
+            res.status(500).json({ error: 'Internal server error' });
+            return;
+        }
+        results = JSON.parse(JSON.stringify(results));
+        res.json({ data: results });
+    });
+
+});
+
+app.post('/fetchCandidateForElections', async (req, res) => {
+
+    const { electionID, verified } = req.body;
+
+    const fetchCandidateQuery = "SELECT passport_id, campaign_desc, educational_qualification, residence, username, dob FROM candidate JOIN users ON candidate.passport_id = users.userID WHERE candidate.electionID = ? AND users.user_type = 'Candidate' AND candidate.verified = ?;";
+    db.query(fetchCandidateQuery, [electionID, verified], (err, results) => {
+        if (err) {
+            console.error('Database error: ' + err.message);
+            res.status(500).json({ error: 'Internal server error' });
+            return;
+        }
+        results = JSON.parse(JSON.stringify(results));
+        res.json({ data: results });
+    });
+
+});
+
 app.post('/candidate-registration', (req, res) => {
     const { username, passport_id, educational_qualification, dob, residence, campaign_desc, electionID } = req.body;
 
