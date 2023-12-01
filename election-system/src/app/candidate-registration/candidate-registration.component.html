@@ -1,0 +1,57 @@
+<div class="header">
+    <h1>Candidate Registration</h1>
+</div>
+<div class="container">
+    <form>
+        <div class="form-group">
+            <label for="name">Full Name:</label>
+            <input [(ngModel)]="username" type="text" id="name" name="name" required>
+        </div>
+
+        <div class="form-group">
+            <label for="dob">Date of Birth:</label>
+            <input [(ngModel)]="dob" type="date" id="dob" name="dob" required>
+        </div>
+
+        <div class="form-group">
+            <label for="passport_id">Email:</label>
+            <input type="text" id="passport_id" name="passport_id" required>
+        </div>
+
+        <div class="form-group">
+            <label for="residence">Residence:</label>
+            <input [(ngModel)]="residence" type="text" id="residence" name="residence" required>
+        </div>
+
+        <div class="form-group">
+            <label for="selectedElectionID">Select Election:</label>
+            <select [(ngModel)]="selectedElectionID" class="dropdown" id="degree" name="degree" required>
+                <option value="">Select</option>
+                <option *ngFor="let option of electionList"  [value]="option.electionID">{{ option.view_options }}</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="passport_id">Passport Card No:</label>
+            <input [(ngModel)]="passport_id" type="text" id="passport_id" name="passport_id" required>
+        </div>
+        <div class="form-group">
+            <label for="degree">Highest Qualification:</label>
+            <select [(ngModel)]="educational_qualification" class="dropdown" id="degree" name="degree" required>
+                <option value="">Select</option>
+                <option value="High School">High School</option>
+                <option value="Bachelor's Degree">Bachelor's Degree</option>
+                <option value="Master's Degree">Master's Degree</option>
+                <option value="Ph.D.">Ph.D.</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="platform">Campaign Description:</label>
+            <textarea [(ngModel)]="campaign_desc" id="platform" name="platform" rows="4" required></textarea>
+        </div>
+        <div class="btn-container">
+            <button (click)="register()" type="submit">Submit</button>
+            <div class="pad-10 back-btn" (click)="back()">Back</div>
+        </div>
+    </form>
+</div>
