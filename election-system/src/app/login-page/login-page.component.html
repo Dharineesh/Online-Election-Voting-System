@@ -1,0 +1,25 @@
+<div class="header">
+    <h1>ELECTION COMMISSION PORTAL</h1>
+</div>
+<div class="login-container">
+    <div class="left-panel">
+        <div class="left-top">
+            <h2>Login As:</h2>
+            <a class="link" (click)="changeLoginType('Candidate')">Candidate</a> |
+            <a class="link" (click)="changeLoginType('Voter')">Voter</a> |
+            <a class="link" (click)="changeLoginType('Admin')">Admin</a>
+        </div>
+        <div class="left-bottom link">
+            <div *ngIf="loginType == 'Candidate'" class="text" (click)="openReg()">Register here for election!</div>
+            <div *ngIf="loginType == 'Voter'" (click)="openReg()" class="text">Register here for voting!</div>
+        </div>
+    </div>
+    <div class="right-panel">
+        <h2>{{ loginType }} Login</h2>
+        <div class="login-form">
+            <input [(ngModel)]="userid" type="text" placeholder="UserID" required>
+            <input [(ngModel)]="password" type="password" placeholder="Password" required>
+            <button (click)="login()">Login</button>
+        </div>
+    </div>
+</div>
