@@ -9,7 +9,7 @@ import { LoginPageComponent } from './login-page/login-page.component';
 // import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 // import { VoterDashboardComponent } from './voter-dashboard/voter-dashboard.component';
 // import { CandidateDashboardComponent } from './candidate-dashboard/candidate-dashboard.component';
-// import { CandidateRegistrationComponent } from './candidate-registration/candidate-registration.component';
+import { CandidateRegistrationComponent } from './candidate-registration/candidate-registration.component';
 import { VoterRegistrationComponent } from './voter-registration/voter-registration.component';
 
 @NgModule({
@@ -19,7 +19,7 @@ import { VoterRegistrationComponent } from './voter-registration/voter-registrat
     // VoterDashboardComponent,
     // AdminDashboardComponent,
     // CandidateDashboardComponent,
-    // CandidateRegistrationComponent,
+    CandidateRegistrationComponent,
     VoterRegistrationComponent
   ],
   imports: [
@@ -32,7 +32,7 @@ import { VoterRegistrationComponent } from './voter-registration/voter-registrat
       // {path: 'admin-dashboard', component: AdminDashboardComponent},
       // {path: 'voter-dashboard', component: VoterDashboardComponent},
       // {path: 'candidate-dashboard', component: CandidateDashboardComponent},
-      // {path: 'candidate-registration', component: CandidateRegistrationComponent},
+      {path: 'candidate-registration', component: CandidateRegistrationComponent},
       {path: 'voter-registration', component: VoterRegistrationComponent},
     ]),
   ],
