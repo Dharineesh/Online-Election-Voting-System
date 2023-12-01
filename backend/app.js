@@ -148,6 +148,185 @@ app.post('/fetchCandidateForElections', async (req, res) => {
 
 });
 
+app.post('/fetchElectionResults', (req, res) => {
+
+    const { electionID } = req.body;
+
+    const fetchCandidateQuery = "SELECT passport_id, campaign_desc, educational_qualification, residence, username, dob FROM candidate JOIN users ON candidate.passport_id = users.userID WHERE candidate.electionID = ? AND users.user_type = 'Candidate' AND candidate.verified = 1;";
+    db.query(fetchCandidateQuery, [electionID], async (err, results) => {
+        if (err) {
+            console.error('Database error: ' + err.message);
+            res.status(500).json({ error: 'Internal server error' });
+            return;
+        }
+        results = JSON.parse(JSON.stringify(results));
+        let candidateIDs = [];
+        if (results && results.length) {
+            results.forEach(element => {
+                candidateIDs.push(element.passport_id);
+            });
+            const fetchVotingCount = "SELECT candidateID from election_voting WHERE electionID = ? AND candidateID IN (?)";
+            db.query(fetchVotingCount, [electionID, candidateIDs], (err, results1) => {
+                if (err) {
+                    console.error('Database error: ' + err.message);
+                    res.status(500).json({ error: 'Internal server error' });
+                    return;
+                }
+                results1 = JSON.parse(JSON.stringify(results1));
+                results.forEach(eachCandidate => {
+                    eachCandidate.votes = 0;
+                    results1.forEach(eachVoting => {
+                        if(eachCandidate.passport_id == eachVoting.candidateID) {
+                            eachCandidate.votes++;
+                        }
+                    });
+                });
+                res.json({ data: results });
+            });
+        } else {
+            res.json({ data: results });
+        }
+    });
+
+});
+
+app.post('/fetchCandidateData', (req, res) => {
+
+    const { userID } = req.body;
+
+    const fetchCandidateQuery = "SELECT passport_id, campaign_desc, educational_qualification, residence, username, dob, elections.electionID AS electionID, electionName FROM candidate JOIN users ON candidate.passport_id = users.userID JOIN elections ON candidate.electionID = elections.electionID WHERE candidate.passport_id = ? AND users.user_type = 'Candidate' AND candidate.verified = 1;";
+    db.query(fetchCandidateQuery, [userID], (err, results) => {
+        if (err) {
+            console.error('Database error: ' + err.message);
+            res.status(500).json({ error: 'Internal server error' });
+            return;
+        }
+        results = JSON.parse(JSON.stringify(results));
+        res.json({ data: results });
+    });
+
+});
+
+app.get('/fetchAllVoters', (req, res) => {
+
+    const fetchVotersQuery = "SELECT passport_id, username, dob FROM voter JOIN users ON voter.passport_id = users.userID;";
+    db.query(fetchVotersQuery, (err, results) => {
+        if (err) {
+            console.error('Database error: ' + err.message);
+            res.status(500).json({ error: 'Internal server error' });
+            return;
+        }
+        results = JSON.parse(JSON.stringify(results));
+        res.json({ data: results });
+    });
+
+});
+
+app.post('/voteForACandidate', (req, res) => {
+
+    const { electionID, candidateID, voterID } = req.body;
+
+    const voteForACandidateQuery = "INSERT INTO election_voting (electionID, candidateID, voterID) VALUES(?, ?, ?);";
+    db.query(voteForACandidateQuery, [electionID, candidateID, voterID], (err, results) => {
+        if (err) {
+            console.error('Database error: ' + err.message);
+            res.status(500).json({ error: 'Internal server error' });
+            return;
+        }
+        res.json({ voting: true, message: "Voting registered successfully!" });
+    });
+
+});
+
+app.post('/updateCondidateStatus', (req, res) => {
+
+    const { electionID, passport_id, verified } = req.body;
+
+    const updateCandidateQuery = "UPDATE candidate SET verified = ? WHERE electionID = ? AND passport_id = ?";
+    db.query(updateCandidateQuery, [verified, electionID, passport_id], (err, results) => {
+        if (err) {
+            console.error('Database error: ' + err.message);
+            res.status(500).json({ error: 'Internal server error' });
+            return;
+        }
+        res.json({
+            res: true,
+            message: "Candidate status updated successfully!"
+        });
+    });
+
+});
+
+app.post('/saveCandidateDetails', (req, res) => {
+
+    const payload = req.body;
+    const promiseArray = [];
+    promiseArray.push(new Promise((resolve, reject) => {
+        const updateUserQuery = "UPDATE users SET dob = ? WHERE userID = ?";
+        db.query(updateUserQuery, [payload.dob, payload.userID], (err, results) => {
+            if (err) {
+                reject(err);
+            }
+            resolve(true);
+        });
+    }));
+    promiseArray.push(new Promise((resolve, reject) => {
+        const updateCandidateQuery = "UPDATE candidate SET residence = ?, educational_qualification = ?, campaign_desc = ? WHERE passport_id = ?";
+        db.query(updateCandidateQuery, [payload.residence, payload.educational_qualification, payload.campaign_desc, payload.userID], (err, results) => {
+            if (err) {
+                reject(err);
+            }
+            resolve(true);
+        });
+    }));
+
+    Promise.all(promiseArray).then((result1, result2) => {
+        res.json({
+            res: true,
+            message: "Candidate details updated successfully!"
+        });
+    }).catch((err) => {
+        console.error('Database error: ' + err.message);
+        res.status(500).json({ error: 'Internal server error' });
+        return;
+    });
+    
+});
+
+app.post('/fetchUnVotedElection', (req, res) => {
+
+    const { userID } = req.body;
+
+    const fetchElectionVotingData = "SELECT electionID FROM election_voting WHERE voterID = ?";
+    db.query(fetchElectionVotingData, [userID], (err, results) => {
+        if (err) {
+            console.error('Database error: ' + err.message);
+            res.status(500).json({ error: 'Internal server error' });
+            return;
+        }
+        results = JSON.parse(JSON.stringify(results));
+        let electionIds = [];
+        if (results && results.length == 0) {
+            electionIds = [''];
+        } else {
+            results.forEach(element => {
+                electionIds.push(element.electionID);
+            });
+        }
+        const fetchAllUnVotedElection = "SELECT * FROM elections WHERE electionID NOT IN (?)";
+        db.query(fetchAllUnVotedElection, [electionIds], (err, results1) => {
+            if (err) {
+                console.error('Database error: ' + err.message);
+                res.status(500).json({ error: 'Internal server error' });
+                return;
+            }
+            results1 = JSON.parse(JSON.stringify(results1));
+            res.json({ data: results1 });
+        });
+    });
+
+});
+
 app.post('/candidate-registration', (req, res) => {
     const { username, passport_id, educational_qualification, dob, residence, campaign_desc, electionID } = req.body;
 
