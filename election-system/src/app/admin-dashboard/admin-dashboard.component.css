@@ -1,0 +1,170 @@
+.header {
+    background-color: #2d314c;
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+}
+
+.add-elec {
+    background-color: #2d314c !important;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar {
+    background-color: #f58020;
+    overflow: hidden;
+}
+
+.navbar a {
+    float: left;
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.navbar a:hover {
+    background-color: #363b59;
+}
+
+.selected-nav {
+    background-color: #363b59 !important;
+}
+
+.content {
+    padding: 20px;
+}
+
+.add-button {
+    background-color: #f58020;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 10px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+table, th, td {
+    border: 1px solid #ccc;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #363b59;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.logout-button {
+    background-color: #363b59;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.logout-icon {
+    margin-right: 5px;
+}
+
+.dropdown {
+    width: 100%;
+    padding: 10px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+
+.card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 10px;
+    width: 300px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+.card_header {
+    color: #007BFF;
+}
+
+p {
+    margin: 0;
+}
+
+.qualification {
+    font-style: italic;
+}
+
+.card-div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 600px;
+    overflow: auto;
+}
+
+.approval-buttons {
+    display: flex;
+    gap: 20px;
+    padding: 10px;
+}
+
+.approve-button, .reject-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    margin-top: 10;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.approve-button {
+    background-color: #28a745;
+    color: white;
+}
+
+.reject-button {
+    background-color: #dc3545;
+    color: white;
+}
+
+.approve-button:hover, .reject-button:hover {
+    background-color: darken(#28a745, 10%);
+}

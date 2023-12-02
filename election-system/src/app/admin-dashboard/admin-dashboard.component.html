@@ -1,0 +1,168 @@
+<div class="header">
+    <h1>ELECTION COMMISSION PORTAL</h1>
+</div>
+<div class="navbar">
+    <a (click)="open(1)" [ngClass]="{
+        'selected-nav': openDiv == 1
+    }">Election</a>
+    <a (click)="open(2)" [ngClass]="{
+        'selected-nav': openDiv == 2
+    }">Candidate List</a>
+    <a (click)="open(3)" [ngClass]="{
+        'selected-nav': openDiv == 3
+    }">Voters List</a>
+    <a (click)="open(4)" [ngClass]="{
+        'selected-nav': openDiv == 4
+    }">Election Results</a>
+    <a (click)="open(5)" [ngClass]="{
+        'selected-nav': openDiv == 5
+    }">Approve/Reject Candidate</a>
+    <a (click)="logout()">
+        <i class="fas fa-sign-out-alt logout-icon"></i> Logout
+    </a>
+</div>
+<div class="content">
+    <div *ngIf="openDiv == 1">
+        <div class="container">
+            <button *ngIf="!showCreateElection" (click)="showCreateElect()" class="add-button" id="openDialog">Add New Election</button>
+            <form *ngIf="showCreateElection">
+                <div class="form-group">
+                    <label for="electionID">Election ID:</label>
+                    <input [(ngModel)]="electionID" type="text" id="electionID" [ngModelOptions]="{standalone: true}" required>
+                </div>
+                <div class="form-group">
+                    <label for="electionName">Election Name:</label>
+                    <input [(ngModel)]="electionName" type="text" id="electionName" [ngModelOptions]="{standalone: true}" required>
+                </div>
+                <div class="form-group">
+                    <label for="electionDate">Voting Deadline:</label>
+                    <input [(ngModel)]="electionDate" type="datetime-local" id="electionDate" [ngModelOptions]="{standalone: true}" required>
+                </div>
+                <button class="add-button add-elec" (click)="addNewElection()">Add Election</button>
+            </form>
+            <div class="no-data-found" *ngIf="!(electionList && electionList.length)">No Elections Found</div>
+            <h2>Election List</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Election ID</th>
+                        <th>Election Name</th>
+                        <th>Voting Deadline</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let each of electionList">
+                        <td>{{ each.electionID }}</td>
+                        <td>{{ each.electionName }}</td>
+                        <td>{{ each.electionDate }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div *ngIf="openDiv == 2">
+        <div class="form-group">
+            <label for="selectedElectionID">Select Election:</label>
+            <select [(ngModel)]="selectedElectionID_CanList" class="dropdown" id="degree" name="degree" (change)="changeOptionInCanList()" required>
+                <option *ngFor="let option of electionList"  [value]="option.electionID">{{ option.view_options }}</option>
+            </select>
+        </div>
+        <div class="no-data-found" *ngIf="selectedElectionID_CanList && !(approvedCandidateList && approvedCandidateList.length)">No Candidates Found</div>
+        <div *ngIf="approvedCandidateList && approvedCandidateList.length">
+            <h2>Candidate List</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Full Name</th>
+                        <th>Passport ID</th>
+                        <th>Residence</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let each of approvedCandidateList">
+                        <td>{{ each.username }}</td>
+                        <td>{{ each.passport_id }}</td>
+                        <td>{{ each.residence }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div *ngIf="openDiv == 3">
+        <div class="no-data-found" *ngIf="!(votersList && votersList.length)">No Voters Found</div>
+        <div *ngIf="votersList && votersList.length">
+            <h2>Voters List</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Passport ID</th>
+                        <th>Full Name</th>
+                        <th>D.O.B</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let each of votersList">
+                        <td>{{ each.passport_id }}</td>
+                        <td>{{ each.username }}</td>
+                        <td>{{ each.dob }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div *ngIf="openDiv == 4">
+        <div class="form-group">
+            <label for="selectedElectionID_CanList">Select Election:</label>
+            <select [(ngModel)]="selectedElectionID_CanList" class="dropdown" id="degree" name="degree" (change)="fetchElectionResults()" required>
+                <option *ngFor="let option of electionList"  [value]="option.electionID">{{ option.view_options }}</option>
+            </select>
+        </div>
+        <div class="no-data-found" *ngIf="selectedElectionID_CanList && !(resultsList && resultsList.length)">No Candidates Found</div>
+        <div *ngIf="resultsList && resultsList.length">
+            <h2>Votes per candidate:</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Full Name</th>
+                        <th>Passport ID</th>
+                        <th>Residence</th>
+                        <th>Votes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let each of resultsList">
+                        <td>{{ each.username }}</td>
+                        <td>{{ each.passport_id }}</td>
+                        <td>{{ each.residence }}</td>
+                        <td>{{ each.votes }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div *ngIf="openDiv == 5">
+        <div class="form-group">
+            <label for="selectedElectionID">Select Election:</label>
+            <select [(ngModel)]="selectedElectionID" class="dropdown" id="degree" name="degree" (change)="onOptionSelected()" required>
+                <option *ngFor="let option of electionList"  [value]="option.electionID">{{ option.view_options }}</option>
+            </select>
+        </div>
+        <div class="no-data-found" *ngIf="selectedElectionID && !(candidateList && candidateList.length)">No Candidates Found</div>
+        <div class="card-div">
+            <div *ngFor="let candidate of candidateList; let i = index" class="card">
+                <h2 class="card_header">Candidate {{ i + 1 }}</h2>
+                <p><strong>Passport ID:</strong> {{ candidate.passport_id }}</p>
+                <p><strong>Username:</strong> {{ candidate.username }}</p>
+                <p><strong>Residence:</strong> {{ candidate.residence }} </p>
+                <p><strong>Date of Birth:</strong> {{ candidate.dob }}</p>
+                <p class="qualification"><strong>Educational Qualification:</strong> {{ candidate.educational_qualification }}</p>
+                <p><strong>Campaign Details:</strong> {{ candidate.campaign_desc }}</p>
+                <div class="approval-buttons">
+                    <button class="approve-button" (click)="candidateAction(candidate, 'approve')">Approve</button>
+                    <button class="reject-button" (click)="candidateAction(candidate, 'reject')">Reject</button>
+                </div>
+            </div>
+    
+        </div>
+    </div>
+</div>
