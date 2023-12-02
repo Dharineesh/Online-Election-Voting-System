@@ -1,0 +1,29 @@
+.mar-top-10 {
+    margin-top: 10px;
+}
+
+button {
+    padding: 10px;
+    background-color: #f58020;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 10px;
+    width: 110px;
+}
+
+.btn-container {
+    display: flex;
+    justify-content: center;
+}
+
+.justify-space {
+    justify-content: space-between;
+}
+
+.welcome-card {
+    padding: 15px !important;
+    color: antiquewhite;
+    font-size: 18px;
+}

@@ -8,7 +8,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { LoginPageComponent } from './login-page/login-page.component';
 // import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 import { VoterDashboardComponent } from './voter-dashboard/voter-dashboard.component';
-// import { CandidateDashboardComponent } from './candidate-dashboard/candidate-dashboard.component';
+import { CandidateDashboardComponent } from './candidate-dashboard/candidate-dashboard.component';
 import { CandidateRegistrationComponent } from './candidate-registration/candidate-registration.component';
 import { VoterRegistrationComponent } from './voter-registration/voter-registration.component';
 
@@ -18,7 +18,7 @@ import { VoterRegistrationComponent } from './voter-registration/voter-registrat
     LoginPageComponent,
     VoterDashboardComponent,
     // AdminDashboardComponent,
-    // CandidateDashboardComponent,
+    CandidateDashboardComponent,
     CandidateRegistrationComponent,
     VoterRegistrationComponent
   ],
@@ -31,7 +31,7 @@ import { VoterRegistrationComponent } from './voter-registration/voter-registrat
       {path: '', component: LoginPageComponent},
       // {path: 'admin-dashboard', component: AdminDashboardComponent},
       {path: 'voter-dashboard', component: VoterDashboardComponent},
-      // {path: 'candidate-dashboard', component: CandidateDashboardComponent},
+      {path: 'candidate-dashboard', component: CandidateDashboardComponent},
       {path: 'candidate-registration', component: CandidateRegistrationComponent},
       {path: 'voter-registration', component: VoterRegistrationComponent},
     ]),

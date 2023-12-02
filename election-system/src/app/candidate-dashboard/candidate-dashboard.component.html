@@ -1,0 +1,68 @@
+<div class="header">
+    <h1>ELECTION COMMISSION PORTAL</h1>
+</div>
+<div class="navbar justify-space">
+    <div class="no-data-found welcome-card" >
+        Welcome {{ userData.userData.username }}
+    </div>
+    <a (click)="logout()">
+        <i class="fas fa-sign-out-alt logout-icon"></i> Logout
+    </a>
+</div>
+<div class="container">
+    <h2>Update Profile</h2>
+    <form>
+        <div class="form-group">
+            <label for="name">Full Name:</label>
+            <input [(ngModel)]="username" type="text" id="name" name="name" readonly>
+        </div>
+
+        <!-- <div class="form-group">
+            <label for="name">Email:</label>
+            <input [(ngModel)]="email" type="text" id="name" name="name" readonly>
+        </div> -->
+
+        <div class="form-group">
+            <label for="dob">Date of Birth:</label>
+            <input [(ngModel)]="dob" type="date" id="dob" name="dob" required>
+        </div>
+
+        <div class="form-group">
+            <label for="residence">Residence:</label>
+            <input [(ngModel)]="residence" type="text" id="residence" name="residence" required>
+        </div>
+
+        <div class="form-group">
+            <label for="selectedElectionID">Election:</label>
+            <input [(ngModel)]="electionData" type="text" id="electionData" name="electionData" readonly>
+        </div>
+
+        <div class="form-group">
+            <label for="passport_id">Passport Card No:</label>
+            <input [(ngModel)]="passport_id" type="text" id="passport_id" name="passport_id" readonly>
+        </div>
+        <div class="form-group">
+            <label for="degree">Highest Qualification:</label>
+            <select [(ngModel)]="educational_qualification" class="dropdown" id="degree" name="degree" required>
+                <option value="">Select</option>
+                <option value="High School">High School</option>
+                <option value="Bachelor's Degree">Bachelor's Degree</option>
+                <option value="Master's Degree">Master's Degree</option>
+                <option value="Ph.D.">Ph.D.</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="platform">Campaign Description:</label>
+            <textarea [(ngModel)]="campaign_desc" id="platform" name="platform" rows="4" required></textarea>
+        </div>
+        <div class="btn-container">
+            <button (click)="updateProfile()" type="submit">Update</button>
+        </div>
+    </form>
+</div>
+
+
+
+
+
+
