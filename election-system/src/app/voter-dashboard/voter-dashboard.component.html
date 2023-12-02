@@ -1,0 +1,37 @@
+<div class="header">
+    <h1>ELECTION COMMISSION PORTAL</h1>
+</div>
+<div class="navbar justify-space">
+    <div class="no-data-found welcome-card" >
+        Welcome {{ userData.userData.username }}
+    </div>
+    <a (click)="logout()">
+        <i class="fas fa-sign-out-alt logout-icon"></i> Logout
+    </a>
+</div>
+
+<div class="no-data-found" *ngIf="!(electionList && electionList.length)">No Elections Found To Vote</div>
+
+<div class="form-group mar-top-10" *ngIf="electionList && electionList.length">
+    <label for="selectedElectionID">Select Election To Vote:</label>
+    <select [(ngModel)]="selectedElectionID" class="dropdown" id="degree" name="degree" (change)="fetchAllCandidates()" required>
+        <option *ngFor="let option of electionList"  [value]="option.electionID">{{ option.view_options }}</option>
+    </select>
+</div>
+
+<div class="no-data-found" *ngIf="selectedElectionID && !(candidateList && candidateList.length)">No Candidates Found</div>
+
+<div class="card-div" *ngIf="candidateList && candidateList.length">
+    <div *ngFor="let candidate of candidateList; let i = index" class="card">
+        <h2 class="card_header">Candidate {{ i + 1 }}</h2>
+        <p><strong>Full Name:</strong>{{ candidate.username }}</p>
+        <p><strong>Residence:</strong> {{ candidate.residence }} </p>
+        <p><strong>Date of Birth:</strong> {{ candidate.dob }}</p>
+        <p class="qualification"><strong>Educational Qualification:</strong> {{ candidate.educational_qualification }}</p>
+        <p><strong>Campaign Details:</strong> {{ candidate.campaign_desc }}</p>
+        <div class="approval-buttons">
+            <button class="approve-button" (click)="voteForACandidate(candidate)">Click here to vote</button>
+        </div>
+    </div>
+
+</div>
